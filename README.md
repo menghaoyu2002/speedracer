@@ -1,7 +1,7 @@
 # Typeracer Autotyper
 Autotyper for typeracer. Works just as the name implies.
 
-Note: I do not condone cheating. This was just a mini project I did while messing around with python libraries.
+Note: I do not condone cheating. This was just a mini project I did while messing around with python libraries. All testing was done in a private Typeracer lobby.
 Use at your own discretion.
 
 # Dependencies / Libraries Used
