@@ -5,5 +5,5 @@ Note: I do not condone cheating. This was just a mini project I did while messin
 Use at your own discretion.
 
 # Dependencies / Libraries Used
-This project uses the Pillow Library to capture images and the Tesseract/Pytesseract to read the text on the images.
+This project uses the Pillow Library to capture images and the Tesseract/Pytesseract to read the text on the images.\
 Pyautogui is used to type out the words.
