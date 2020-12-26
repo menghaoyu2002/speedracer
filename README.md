@@ -9,4 +9,4 @@ This project uses the Pillow Library to capture images and the Tesseract/Pytesse
 Pyautogui is used to type out the words.
 
 # Demonstration
-(Youtube Video Demonstrating the Autotyper)[https://www.youtube.com/watch?v=4qUObfZtN9Y&feature=youtu.be]
+[Youtube Video Demonstration](https://www.youtube.com/watch?v=4qUObfZtN9Y&feature=youtu.be)
