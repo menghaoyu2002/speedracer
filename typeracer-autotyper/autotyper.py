@@ -53,10 +53,8 @@ class AutoTyper:
         self._text = pt.image_to_string(Image.open('image.png'))
 
         # filtering and replacing commonly wrong characters
-        while "|" in self._text:
-            self._text = self._text.replace("|", "I")
-        while "\n" in self._text:
-            self._text = self._text.replace("\n", " ")
+        self._text = self._text.replace("|", "I")
+        self._text = self._text.replace("\n", " ")
 
     def printText(self):
         print(self._text)

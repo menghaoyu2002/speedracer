@@ -4,6 +4,7 @@ Change the delay to your own preference.
 Make sure all libraries are downloaded
 """
 from autotyper import AutoTyper
+from ui import UserInterface
 from ahk import AHK
 from typing import Optional
 
@@ -28,5 +29,7 @@ while run:
     # keybind to end program
     if ahk.key_state("Escape"):
         run = False
+
+    
 
 
