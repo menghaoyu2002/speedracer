@@ -58,7 +58,8 @@ class AutoTyper:
         while "\n" in self._text:
             self._text = self._text.replace("\n", " ")
 
-        print(self._text)  # uncomment this if you want to see the text
+    def printText(self):
+        print(self._text)
 
     def type(self, delay: float) -> None:
         """Types out the text from image.png with a delay of <delay> (in seconds)
