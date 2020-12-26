@@ -9,29 +9,62 @@ Reading wise it's pretty good.
 import pytesseract as pt
 from PIL import ImageGrab, Image
 import pyautogui
+from typing import Optional
 
-# Default x and y values
-x = 450
-y=600
 
-pt.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract'
+class AutoTyper:
+    """A Class for an autotyper
 
-# capturing the screen as an image
-screen = ImageGrab.grab(bbox=(x, y, 1000 + x, 250+y))
-screen.save('image.png')
+    Instance Attributes:
+        - x: the x coordinates of the top left corner of the image boxes
+          (where you want to the image to start from on your screen)
 
-# reading the text on the screen to a string
-text = pt.image_to_string(Image.open('image.png'))
-print(text)
+        - y: the y coordinates of the top left corner of the image boxes
+          (where you want to the image to start from on your screen)
 
-# filtering and replacing commonly wrong characters
-while "|" in text:
-    text = text.replace("|", "I")
-while "\n" in text:
-    text = text.replace("\n", " ")
+        - height: the height of the box
 
-# typing the string out
-pyautogui.write(text, interval=0.01)
+        - width: the width of the box
+
+    Note: the default values are set for typeracer on 125% zoom on 1920 x 1080
+    """
+    x: int
+    y: int
+    width: int
+    height: int
+
+    # Private Attributes
+    _text: Optional[str] = None
+
+    def __init__(self, x=450, y=600, width=1000, height=250) -> None:
+        pt.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract'
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+
+    def getImage(self) -> None:
+        """Saves an image in the main folder for the program to read text off of"""
+        screen = ImageGrab.grab(bbox=(self.x, self.y, self.width + self.x, self.height +self.y))
+        screen.save('image.png')
+
+    def readText(self) -> None:
+        """Reads the text on image.png to a string"""
+        self._text = pt.image_to_string(Image.open('image.png'))
+
+        # filtering and replacing commonly wrong characters
+        while "|" in self._text:
+            self._text = self._text.replace("|", "I")
+        while "\n" in self._text:
+            self._text = self._text.replace("\n", " ")
+
+        # print(self._text)  # uncomment this if you want to see the text
+
+    def type(self, delay=0.01) -> None:
+        """Types out the text from image.png with a delay of <delay> (in seconds)
+        with a default delay of 0.01
+        """
+        pyautogui.write(self._text, interval=delay)
 
 
 
