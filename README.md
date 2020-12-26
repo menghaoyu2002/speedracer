@@ -7,3 +7,6 @@ Use at your own discretion.
 # Dependencies / Libraries Used
 This project uses the Pillow Library to capture images and the Tesseract/Pytesseract to read the text on the images.\
 Pyautogui is used to type out the words.
+
+# Demonstration
+(Youtube Video Demonstrating the Autotyper)[https://www.youtube.com/watch?v=4qUObfZtN9Y&feature=youtu.be]
