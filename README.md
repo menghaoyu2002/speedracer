@@ -8,5 +8,4 @@ Use at your own discretion.
 This project uses the Pillow Library to capture images and the Tesseract/Pytesseract to read the text on the images.\
 Pyautogui is used to type out the words.
 
-# Demonstration
-[Youtube Video Demonstration](https://www.youtube.com/watch?v=4qUObfZtN9Y&feature=youtu.be)
+[Youtube Video Demonstration of Autotyper](https://www.youtube.com/watch?v=4qUObfZtN9Y&feature=youtu.be)
