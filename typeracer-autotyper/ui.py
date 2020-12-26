@@ -2,12 +2,9 @@ from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 
-
-
 root = Tk()
 
 # constants
-
 SCREEN_WITDTH = root.winfo_screenwidth()
 SCREEN_HEIGHT = root.winfo_screenheight()
 
@@ -41,10 +38,19 @@ class UserInterface:
         y_scale = Slider(SCREEN_HEIGHT, y_value, y_label)
         y_scale.scale.grid(column=0, row=4, sticky='nw')
 
+        # height labels and sliders
+        height_value = StringVar()
+        height_label = ttk.Label(root)
+        height_label.grid(column=0, row=5, sticky='we')
+        height_scale = Slider(SCREEN_HEIGHT, height_value, height_label)
+        height_scale.scale.grid(column=0, row=6, sticky='nw')
+
         # delay label and sliders
-
-
-
+        delay_value = StringVar()
+        delay_label = ttk.Label(root)
+        delay_label.grid(column=0, row=7, sticky='we')
+        delay_scale = Slider(1.0, delay_value, delay_label)
+        delay_scale.scale.grid(column=0, row=8, sticky='nw')
 
 
 
