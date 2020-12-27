@@ -110,10 +110,11 @@ class UserInterface:
         preview_button.grid(column=0, row=16, sticky='nw', padx=10, pady=10)
 
 
-        start_button = Button(root, text="Run AutoTyper", command=self.type, height=1, width=15, font="Verdana", border=5 )
+        start_button = Button(root, text="Run AutoTyper", command=self.type_text, height=1, width=15, font="Verdana", border=5 )
         start_button.grid(column=0, row=13, sticky='nw', padx=10, pady=10)
 
-    def type(self) -> None:
+
+    def type_text(self) -> None:
         """Type the text on typeracer out"""
         autotyper = AutoTyper(self.x_value.get(), self.y_value.get(),
                               self.width_value.get(), self.height_value.get())
@@ -123,18 +124,24 @@ class UserInterface:
 
     def load_preview(self):
         self.canvas.delete('all')
-        image = ImageGrab.grab(bbox=(self.x_value.get(), self.y_value.get(),
-                                     self.width_value.get() + self.x_value.get(),
-                                     self.height_value.get() + self.y_value.get()))
+        try:
+            image = ImageGrab.grab(bbox=(self.x_value.get(), self.y_value.get(),
+                                        self.width_value.get() + self.x_value.get(),
+                                        self.height_value.get() + self.y_value.get()))
 
-        image.save('image.png')
+            image.save('image.png')
 
-        image = Image.open('image.png')
-        image = image.resize((500, 300), Image.ANTIALIAS)
-        screen = ImageTk.PhotoImage(image)
-        self.canvas.create_image(0, 0, anchor='nw', image=screen)
-        self.canvas.image = screen
-        print('showing preview now')
+            image = Image.open('image.png')
+            image = image.resize((500, 300), Image.ANTIALIAS)
+            screen = ImageTk.PhotoImage(image)
+            self.canvas.create_image(0, 0, anchor='nw', image=screen)
+            self.canvas.image = screen
+            print('showing preview now')
+
+        # catches invalid box dimensions
+        except:
+            self.canvas.create_text(250, 150, anchor='center', text='PLEASE ENTER A VALID INPUT FOR THE DIMENSIONS \nOF THE BOX',
+                                    fill='red', font="Verdana")
 
 
 if __name__ == '__main__':
