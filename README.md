@@ -10,7 +10,7 @@ Use at your own discretion.
 This project uses the Pillow Library to capture images and the Tesseract/Pytesseract to read the text on the images.\
 the "Keyboard" library is used to type out the words and to catch keyboard inputs. Tkinter is used for the GUI.
 
-Note: You have to download [Tesseract to run this program](https://github.com/tesseract-ocr/tesseract/releases). If program doesn't run try specifying the Tesseract path in autotyper.py line 40 so that it corresponds with your own.
+Note: You have to download [Tesseract](https://github.com/tesseract-ocr/tesseract/releases) to run this program. If program doesn't run try specifying the Tesseract path in autotyper.py line 40 so that it corresponds with your own.
 
 # Instructions for Usage
 
