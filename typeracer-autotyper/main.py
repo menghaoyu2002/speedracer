@@ -9,13 +9,7 @@ from ahk import AHK
 from typing import Optional
 
 ahk = AHK()
-autotyper = AutoTyper()
 
-def type(typer: AutoTyper, delay: Optional[int] = 0.02) -> None:
-    """Type the text on typeracer out"""
-    typer.getImage()
-    typer.readText()
-    typer.type(delay = delay)
 
 
 #######################################################################
