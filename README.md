@@ -12,6 +12,7 @@ Pyautogui is used to type out the words. ahk for python is used to catch keyboar
 
 You might need to download some other dependencies to use (like autohotkey and Tesseract).
 
+Note: If program doesn't run try specifying the Tesseract path in autotyper.py line 40 so that it corresponds with your own.
 
 # Instructions for Usage
 
