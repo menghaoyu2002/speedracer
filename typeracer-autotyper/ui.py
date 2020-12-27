@@ -87,7 +87,7 @@ class UserInterface:
         width_field.entry.grid(column=1, row=9, padx=5)
 
         # delay label and sliders
-        width = ttk.Label(root, text='The typing delay is:', font='Verdana', padding=5)
+        width = ttk.Label(root, text='Typing delay:', font='Verdana', padding=5)
         width.grid(column=0, row=10, sticky='nw', pady=10)
 
         #delay variable
@@ -106,12 +106,26 @@ class UserInterface:
         self.canvas = Canvas(previewframe, width=700, height=500)
         self.canvas.grid(sticky='E')
 
-        preview_button = Button(root, text="See Preview", command=self.load_preview, height=1, width=15, font="Verdana", border=5 )
+        # Preview Buttons and Labels
+        preview_button = Button(root, text="See Preview", command=self.load_preview, height=1, width=17, font="Verdana", border=5 )
         preview_button.grid(column=0, row=16, sticky='nw', padx=10, pady=10)
 
+        preview_label = Message(root, text='Preview of what the program sees below \n     (click the preview button to see)', font="Verdana", width=500)
+        preview_label.place(x=445, y=25)
 
-        start_button = Button(root, text="Run AutoTyper", command=self.type_text, height=1, width=15, font="Verdana", border=5 )
-        start_button.grid(column=0, row=13, sticky='nw', padx=10, pady=10)
+        # set the colour of the default viewing area to black
+        self.canvas.create_rectangle(0, 0, 500, 300, fill='black' )
+
+        # keybind for the execution of the program
+        self.keybind = "F12"
+        root.bind(f'<{self.keybind}>', lambda _: print('pressed'))
+
+        self.keybind_label = Message(root, text= f"Press \"{self.keybind}\" to run the program", font="Verdana", width=500)
+        self.keybind_label.place(x=490, y=450)
+
+
+        change_keybind = Button(root, text='Change Keybinding', font="Verdana", height=1, width=17, border=5, command=self.update_keybinding)
+        change_keybind.grid(column=0, row=13, sticky='nw', padx=10, pady=10)
 
 
     def type_text(self) -> None:
@@ -136,19 +150,37 @@ class UserInterface:
             screen = ImageTk.PhotoImage(image)
             self.canvas.create_image(0, 0, anchor='nw', image=screen)
             self.canvas.image = screen
-            print('showing preview now')
+            print('Showing Preview Now')
 
         # catches invalid box dimensions
         except:
             self.canvas.create_text(250, 150, anchor='center', text='PLEASE ENTER A VALID INPUT FOR THE DIMENSIONS \nOF THE BOX',
                                     fill='red', font="Verdana")
 
+    def update_keybinding(self) -> None:
+        """Updates the Keybind"""
+        self.temp_label = Message(root, text= f"Listening... Press The Desired Button", font="Verdana", width=500, fg='red')
+        self.temp_label.place(x=465, y=500)
+        root.bind("<Key>", self._update)
+
+    def _update(self, event):
+        """ Secondary function that does all the work"""
+        root.unbind(f"<{self.keybind}>")
+        root.unbind("<Key>")
+        self.keybind = event.keysym
+        root.bind(f"<{self.keybind}>", lambda _ : print('pressed'))
+        self.keybind_label.destroy()
+        self.keybind_label = Message(root, text= f"Press \"{self.keybind}\" to run the program", font="Verdana", width=500)
+        self.keybind_label.place(x=490, y=450)
+        self.temp_label.destroy()
+
+
 
 if __name__ == '__main__':
     root = Tk()
 
-    # root.resizable(width=False, height=False)
-    root.geometry('{}x{}'.format(900, 550))
+    root.resizable(width=False, height=False)
+    root.geometry('900x560')
     # constants
     SCREEN_WITDTH = root.winfo_screenwidth()
     SCREEN_HEIGHT = root.winfo_screenheight()
