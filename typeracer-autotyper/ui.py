@@ -20,7 +20,7 @@ class UserInterface:
     def __init__(self, root) -> None:
         root.title('Typeracer AutoTyper')
         previewframe = ttk.Frame(root, padding=10)
-        previewframe.place(x=500, y=75)
+        previewframe.place(x=360, y=75)
 
         # x label
         X = ttk.Label(root, text='x value of box position:', font='Verdana', padding=10)
@@ -28,6 +28,7 @@ class UserInterface:
 
         # x variable
         self.x_value = IntVar()
+        self.x_value.set(0.0)
 
         # x slider
         x_scale = Slider(SCREEN_WITDTH, self.x_value)
@@ -43,6 +44,7 @@ class UserInterface:
 
         # y variable
         self.y_value = IntVar()
+        self.y_value.set(0.0)
 
         # y sliders
         y_scale = Slider(SCREEN_HEIGHT, self.y_value)
@@ -58,6 +60,7 @@ class UserInterface:
 
         #height variable
         self.height_value = IntVar()
+        self.height_value.set(0.0)
 
         # height slider
         height_scale = Slider(SCREEN_HEIGHT, self.height_value)
@@ -73,6 +76,7 @@ class UserInterface:
 
         #width variable
         self.width_value = IntVar()
+        self.width_value.set(0.0)
 
         # width slider
         width_scale = Slider(SCREEN_WITDTH, self.width_value)
@@ -88,6 +92,7 @@ class UserInterface:
 
         #delay variable
         self.delay_value = StringVar()
+        self.delay_value.set(0.0)
 
         # delay slider
         delay_scale = Slider(1.0, self.delay_value)
@@ -98,7 +103,7 @@ class UserInterface:
         delay_field.entry.grid(column=1, row=11, padx=5)
 
         #creates a canvas for preview
-        self.canvas = Canvas(previewframe, width=500, height=300)
+        self.canvas = Canvas(previewframe, width=700, height=500)
         self.canvas.grid(sticky='E')
 
         preview_button = Button(root, text="See Preview", command=self.load_preview, height=1, width=15, font="Verdana", border=5 )
@@ -125,10 +130,9 @@ class UserInterface:
         image.save('image.png')
 
         image = Image.open('image.png')
-        image = ImageOps.fit(image, (500, 300))
-        image.save('resized.png')
+        image = image.resize((500, 300), Image.ANTIALIAS)
         screen = ImageTk.PhotoImage(image)
-        self.canvas.create_image(0, 0, anchor='center', image=screen)
+        self.canvas.create_image(0, 0, anchor='nw', image=screen)
         self.canvas.image = screen
         print('showing preview now')
 
