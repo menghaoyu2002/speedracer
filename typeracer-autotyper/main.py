@@ -1,4 +1,4 @@
-from ui import UserInterface
+from modules.ui import UserInterface
 import tkinter as tk
 
 class MainProgram:

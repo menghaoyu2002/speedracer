@@ -4,7 +4,7 @@ This module deals with all the UI features
 from tkinter import *
 from tkinter import ttk
 from PIL import ImageTk, Image, ImageGrab
-from autotyper import AutoTyper
+from modules.autotyper import AutoTyper
 from ahk import AHK
 
 class Slider:
