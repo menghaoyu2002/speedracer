@@ -8,9 +8,7 @@ Use at your own discretion.
 
 # Dependencies / Libraries Used
 This project uses the Pillow Library to capture images and the Tesseract/Pytesseract to read the text on the images.\
-Pyautogui is used to type out the words. ahk for python is used to catch keyboard inputs. Tkinter is used for the GUI.
-
-You might need to download some other dependencies to use (like autohotkey and Tesseract).
+the "Keyboard" library is used to type out the words and to catch keyboard inputs. Tkinter is used for the GUI.
 
 Note: If program doesn't run try specifying the Tesseract path in autotyper.py line 40 so that it corresponds with your own.
 
