@@ -12,19 +12,19 @@ You might need to download some other dependencies to use (like autohotkey and T
 
 
 # Instructions for Usage
-<pre>
+
 <ol>
 <li> Adjust the sliders or enter in values for the x, y, height, and width settings so that the program is able to capture
-  the Typeracer text box (or any text you want typed out for that matter). </li>
+  the Typeracer text box (or any text you want typed out for that matter).</br> <br/> </li> 
   
- <li> Click the "See Preview" Button to see if you've aligned the box correctly </li>   
+ <li> Click the "See Preview" Button to see if you've aligned the box correctly </br> <br/></li>   
 
  <li> Click the "Run Program" button to start the program. The program will wait until you press the Autotype key. 
-  By default it's F12 but you can rebind it with change keybind button </li> 
+  By default it's F12 but you can rebind it with change keybind button </br> <br/></li> 
   
- <li> Press the Autotype key and the Program will start typing. Press the Escape key to exist run mode </li> 
+ <li> Press the Autotype key and the Program will start typing. Press the Escape key to exist run mode </br> <br/></li> 
  </ol>
-</pre>
+
 
 To Rebind the Autotype key simply press the "Change Keybind" button and press the desired keybind.
 
