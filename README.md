@@ -1,5 +1,7 @@
 # Typeracer Autotyper
-Autotyper for typeracer. Works just as the name implies. Can typeauto anything but specifically designed for typeracer.
+Autotyper for typeracer. Works just as the name implies. 
+It reads text from an area of your screen and then types it out upon request.
+Can typeauto anything but specifically designed for typeracer. 
 
 Note: I do not condone cheating. This was just a mini project I did while messing around with python libraries. All testing was done in a private Typeracer lobby.
 Use at your own discretion.
