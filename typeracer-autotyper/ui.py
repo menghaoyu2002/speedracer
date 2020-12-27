@@ -8,17 +8,17 @@ from autotyper import AutoTyper
 from ahk import AHK
 
 class Slider:
-    def __init__(self, max, variable) -> None:
+    def __init__(self,root, max, variable) -> None:
         self.scale = ttk.Scale(root, orient=HORIZONTAL, length=250, from_=0.0, to=max, variable=variable)
 
 
 class Field:
-    def __init__(self, variable) -> None:
+    def __init__(self,root, variable) -> None:
         self.entry = ttk.Entry(root, textvariable=variable, width=7, font="Verdana")
 
 
 class UserInterface:
-    def __init__(self, root) -> None:
+    def __init__(self, root, SCREEN_WIDTH, SCREEN_HEIGHT) -> None:
         root.title('Typeracer AutoTyper')
         previewframe = ttk.Frame(root, padding=10)
         previewframe.place(x=360, y=75)
@@ -33,11 +33,11 @@ class UserInterface:
         self.x_value.set(0.0)
 
         # x slider
-        x_scale = Slider(SCREEN_WITDTH, self.x_value)
+        x_scale = Slider(root, SCREEN_WIDTH, self.x_value)
         x_scale.scale.grid(columnspan=2, column=0, row=1, sticky='nw', pady=10, padx=5)
 
         # x entry field
-        x_field = Field(self.x_value)
+        x_field = Field(root, self.x_value)
         x_field.entry.grid(column=1, row=1, padx=5)
 
         # y labels
@@ -49,11 +49,11 @@ class UserInterface:
         self.y_value.set(0.0)
 
         # y sliders
-        y_scale = Slider(SCREEN_HEIGHT, self.y_value)
+        y_scale = Slider(root, SCREEN_HEIGHT, self.y_value)
         y_scale.scale.grid(column=0, row=5, sticky='nw', pady=10, padx=5)
 
         # y entry field
-        y_field = Field(self.y_value)
+        y_field = Field(root, self.y_value)
         y_field.entry.grid(column=1, row=5, padx=5)
 
         # height labels
@@ -65,11 +65,11 @@ class UserInterface:
         self.height_value.set(0.0)
 
         # height slider
-        height_scale = Slider(SCREEN_HEIGHT, self.height_value)
+        height_scale = Slider(root, SCREEN_HEIGHT, self.height_value)
         height_scale.scale.grid(column=0, row=7, sticky='nw', pady=10, padx=5)
 
         # height field
-        height_field = Field(self.height_value)
+        height_field = Field(root, self.height_value)
         height_field.entry.grid(column=1, row=7,padx=5)
 
         # width labels
@@ -81,11 +81,11 @@ class UserInterface:
         self.width_value.set(0.0)
 
         # width slider
-        width_scale = Slider(SCREEN_WITDTH, self.width_value)
+        width_scale = Slider(root, SCREEN_WIDTH, self.width_value)
         width_scale.scale.grid(column=0, row=9, sticky='nw', pady=10, padx=5)
 
         # width field
-        width_field = Field(self.width_value)
+        width_field = Field(root, self.width_value)
         width_field.entry.grid(column=1, row=9, padx=5)
 
         # delay label and sliders
@@ -97,11 +97,11 @@ class UserInterface:
         self.delay_value.set(0.0)
 
         # delay slider
-        delay_scale = Slider(1.0, self.delay_value)
+        delay_scale = Slider(root, 1.0, self.delay_value)
         delay_scale.scale.grid(column=0, row=11, sticky='nw', pady=10, padx=5)
 
         # delay field
-        delay_field = Field(self.delay_value)
+        delay_field = Field(root, self.delay_value)
         delay_field.entry.grid(column=1, row=11, padx=5)
 
         #creates a canvas for preview
@@ -238,7 +238,7 @@ if __name__ == '__main__':
     root.resizable(width=False, height=False)
     root.geometry('900x560')
     # constants
-    SCREEN_WITDTH = root.winfo_screenwidth()
+    SCREEN_WIDTH = root.winfo_screenwidth()
     SCREEN_HEIGHT = root.winfo_screenheight()
 
     UserInterface(root)
