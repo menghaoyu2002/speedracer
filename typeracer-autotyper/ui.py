@@ -3,7 +3,7 @@ This module deals with all the UI features
 """
 from tkinter import *
 from tkinter import ttk
-from PIL import ImageTk, Image, ImageGrab, ImageOps
+from PIL import ImageTk, Image, ImageGrab
 from autotyper import AutoTyper
 from ahk import AHK
 
@@ -109,8 +109,8 @@ class UserInterface:
         self.canvas.grid(sticky='E')
 
         # Preview Buttons and Labels
-        preview_button = Button(root, text="See Preview", command=self.load_preview, height=1, width=17, font="Verdana", border=5 )
-        preview_button.grid(column=0, row=16, sticky='nw', padx=10, pady=10)
+        self.preview_button = Button(root, text="See Preview", command=self.load_preview, height=1, width=17, font="Verdana", border=5 )
+        self.preview_button.grid(column=0, row=16, sticky='nw', padx=10, pady=10)
 
         preview_label = Message(root, text='Preview of what the program sees below \n     (click the preview button to see)', font="Verdana", width=500)
         preview_label.place(x=445, y=25)
@@ -125,11 +125,14 @@ class UserInterface:
         self.run_button.place(x=550, y=450)
 
         # change keybind button
-        change_keybind = Button(root, text='Change Keybinding', font="Verdana",
+        self.change_keybind = Button(root, text='Change Keybinding', font="Verdana",
                                 height=1, width=17, border=5, command=self.update_keybinding)
-        change_keybind.grid(column=0, row=13, sticky='nw', padx=10, pady=10)
+        self.change_keybind.grid(column=0, row=13, sticky='nw', padx=10, pady=10)
 
     def run(self):
+        self.button_state('disabled')
+        root.update()
+
         try:
             autotyper = AutoTyper(self.x_value.get(), self.y_value.get(),
                                   self.width_value.get(), self.height_value.get())
@@ -137,23 +140,30 @@ class UserInterface:
         except:
             self.error_message = Message(root, text= "INVALID BOX DIMENSIONS. TRY AGAIN", font="Verdana", width=600, foreground='red',)
             self.error_message.place(x=450, y=500)
+            root.update()
+            self.button_state('active')
             return -1
 
+        self.load_preview()
         self.check_error_message()
         self.run_button.destroy()
         self.keybind_label = Message(root, text= f"The Program is Running! Press \"{self.keybind}\" to AutoType! \n           Press \"Escape\" to stop Running.", font="Verdana", width=500)
         self.keybind_label.place(x=410, y=450)
         key = self.keybind.replace('_', '')
+        root.update()
 
         while True:
-            root.update()
             if self.ahk.key_state(key):
                 self.type_text()
             if self.ahk.key_state('escape'):
                 self.keybind_label.destroy()
                 self.run_button = Button(root, text='Run Program', font="Verdana", border=5, command=self.run)
                 self.run_button.place(x=550, y=450)
+                root.update()
                 break
+
+        root.update()
+        self.button_state('active')
 
     def type_text(self) -> None:
         """Type the text on typeracer out"""
@@ -163,7 +173,6 @@ class UserInterface:
         autotyper.readText()
         print('Typing Now')
         autotyper.type(delay = float(self.delay_value.get()))
-
 
     def load_preview(self):
         """Load the Preview onto the window"""
@@ -190,7 +199,9 @@ class UserInterface:
     def update_keybinding(self) -> None:
         """Updates the Keybind"""
         self.check_error_message()
-        self.temp_label = Message(root, text= f"Listening... Press The Desired Button", font="Verdana", width=500, fg='red')
+        self.button_state('disabled')
+        root.update()
+        self.temp_label = Message(root, text= "Listening... Press The Desired Button", font="Verdana", width=500, fg='red')
         self.temp_label.place(x=465, y=500)
         root.bind("<Key>", self._update)
 
@@ -206,11 +217,20 @@ class UserInterface:
             self.error_message.place(x=570, y=500)
             self.keybind = event.keysym
 
+        root.update()
+        self.button_state('active')
+
     def check_error_message(self):
         try:
             self.error_message.destroy()
         except:
             pass
+
+    def button_state(self, option: str):
+        self.preview_button.config(state=option)
+        self.run_button.config(state=option)
+        self.change_keybind.config(state=option)
+
 
 if __name__ == '__main__':
     root = Tk()
