@@ -14,6 +14,8 @@ You might need to download some other dependencies to use (like autohotkey and T
 # Instructions for Usage
 
 <ol>
+  <li> Click on the "main.py" file to open up the program UI </br> <br/> </li>
+  
 <li> Adjust the sliders or enter in values for the x, y, height, and width settings so that the program is able to capture
   the Typeracer text box (or any text you want typed out for that matter).</br> <br/> </li> 
   
