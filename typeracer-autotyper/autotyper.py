@@ -48,6 +48,7 @@ class AutoTyper:
         screen = ImageGrab.grab(bbox=(self.x, self.y, self.width + self.x, self.height +self.y))
         screen.save('image.png')
 
+
     def readText(self) -> None:
         """Reads the text on image.png to a string"""
         self._text = pt.image_to_string(Image.open('image.png'))

@@ -5,6 +5,7 @@ from tkinter import *
 from tkinter import ttk
 from PIL import ImageTk, Image, ImageGrab, ImageOps
 from autotyper import AutoTyper
+from ahk import AHK
 
 class Slider:
     def __init__(self, max, variable) -> None:
@@ -22,6 +23,7 @@ class UserInterface:
         previewframe = ttk.Frame(root, padding=10)
         previewframe.place(x=360, y=75)
 
+        self.ahk = AHK()
         # x label
         X = ttk.Label(root, text='x value of box position:', font='Verdana', padding=10)
         X.grid(column=0, row=0, sticky='nw')
@@ -117,26 +119,55 @@ class UserInterface:
         self.canvas.create_rectangle(0, 0, 500, 300, fill='black' )
 
         # keybind for the execution of the program
-        self.keybind = "F12"
-        root.bind(f'<{self.keybind}>', lambda _: print('pressed'))
+        self.keybind = "F12"  # default value
 
-        self.keybind_label = Message(root, text= f"Press \"{self.keybind}\" to run the program", font="Verdana", width=500)
-        self.keybind_label.place(x=490, y=450)
+        self.run_button = Button(root, text='Run Program', font="Verdana", border=5, command=self.run)
+        self.run_button.place(x=550, y=450)
 
-
-        change_keybind = Button(root, text='Change Keybinding', font="Verdana", height=1, width=17, border=5, command=self.update_keybinding)
+        # change keybind button
+        change_keybind = Button(root, text='Change Keybinding', font="Verdana",
+                                height=1, width=17, border=5, command=self.update_keybinding)
         change_keybind.grid(column=0, row=13, sticky='nw', padx=10, pady=10)
 
+    def run(self):
+        try:
+            autotyper = AutoTyper(self.x_value.get(), self.y_value.get(),
+                                  self.width_value.get(), self.height_value.get())
+            autotyper.getImage()
+        except:
+            self.error_message = Message(root, text= "INVALID BOX DIMENSIONS. TRY AGAIN", font="Verdana", width=600, foreground='red',)
+            self.error_message.place(x=450, y=500)
+            return -1
+
+        self.check_error_message()
+        self.run_button.destroy()
+        self.keybind_label = Message(root, text= f"The Program is Running! Press \"{self.keybind}\" to AutoType! \n           Press \"Escape\" to stop Running.", font="Verdana", width=500)
+        self.keybind_label.place(x=410, y=450)
+        key = self.keybind.replace('_', '')
+
+        while True:
+            root.update()
+            if self.ahk.key_state(key):
+                self.type_text()
+            if self.ahk.key_state('escape'):
+                self.keybind_label.destroy()
+                self.run_button = Button(root, text='Run Program', font="Verdana", border=5, command=self.run)
+                self.run_button.place(x=550, y=450)
+                break
 
     def type_text(self) -> None:
         """Type the text on typeracer out"""
         autotyper = AutoTyper(self.x_value.get(), self.y_value.get(),
-                              self.width_value.get(), self.height_value.get())
+                            self.width_value.get(), self.height_value.get())
         autotyper.getImage()
         autotyper.readText()
+        print('Typing Now')
         autotyper.type(delay = float(self.delay_value.get()))
 
+
     def load_preview(self):
+        """Load the Preview onto the window"""
+        self.check_error_message()
         self.canvas.delete('all')
         try:
             image = ImageGrab.grab(bbox=(self.x_value.get(), self.y_value.get(),
@@ -152,29 +183,34 @@ class UserInterface:
             self.canvas.image = screen
             print('Showing Preview Now')
 
-        # catches invalid box dimensions
-        except:
+        except: # catches invalid box dimensions
             self.canvas.create_text(250, 150, anchor='center', text='PLEASE ENTER A VALID INPUT FOR THE DIMENSIONS \nOF THE BOX',
                                     fill='red', font="Verdana")
 
     def update_keybinding(self) -> None:
         """Updates the Keybind"""
+        self.check_error_message()
         self.temp_label = Message(root, text= f"Listening... Press The Desired Button", font="Verdana", width=500, fg='red')
         self.temp_label.place(x=465, y=500)
         root.bind("<Key>", self._update)
 
     def _update(self, event):
         """ Secondary function that does all the work"""
-        root.unbind(f"<{self.keybind}>")
         root.unbind("<Key>")
-        self.keybind = event.keysym
-        root.bind(f"<{self.keybind}>", lambda _ : print('pressed'))
-        self.keybind_label.destroy()
-        self.keybind_label = Message(root, text= f"Press \"{self.keybind}\" to run the program", font="Verdana", width=500)
-        self.keybind_label.place(x=490, y=450)
         self.temp_label.destroy()
+        if event.keysym == 'Escape':
+            self.error_message = Message(root, text= "Escape isn't a valid input (You need it to quit the program). \n \t  Press the button to try again", font="Verdana", width=600, foreground='red',)
+            self.error_message.place(x=380, y=500)
+        else:
+            self.error_message = Message(root, text= "Success!", font="Verdana", width=600, foreground='green',)
+            self.error_message.place(x=570, y=500)
+            self.keybind = event.keysym
 
-
+    def check_error_message(self):
+        try:
+            self.error_message.destroy()
+        except:
+            pass
 
 if __name__ == '__main__':
     root = Tk()
