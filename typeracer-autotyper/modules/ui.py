@@ -5,7 +5,7 @@ from tkinter import *
 from tkinter import ttk
 from PIL import ImageTk, Image, ImageGrab
 from modules.autotyper import AutoTyper
-from ahk import AHK
+import keyboard
 
 class Slider:
     def __init__(self,root, max, variable) -> None:
@@ -19,11 +19,11 @@ class Field:
 
 class UserInterface:
     def __init__(self, root, SCREEN_WIDTH, SCREEN_HEIGHT) -> None:
+        self.root = root
         root.title('Typeracer AutoTyper')
         previewframe = ttk.Frame(root, padding=10)
         previewframe.place(x=360, y=75)
 
-        self.ahk = AHK()
         # x label
         X = ttk.Label(root, text='x value of box position:', font='Verdana', padding=10)
         X.grid(column=0, row=0, sticky='nw')
@@ -130,39 +130,56 @@ class UserInterface:
         self.change_keybind.grid(column=0, row=13, sticky='nw', padx=10, pady=10)
 
     def run(self):
+        self.check_error_message()
+        # Special Inputs
+        key_dict = {'Prior': 'page up',
+                    'Next': 'page down',
+                    'Shift_L': 'left shift',
+                    'Shift_R': 'right shift',
+                    'Control_L': 'left control',
+                    'Control_R': 'right control',
+                    'Alt_L': 'left alt',
+                    'Alt_R': 'right alt',
+                    'Win_L': 'left windows',
+                    'Win_R': 'right windows',
+                    'quoteleft': '`'}
+
         self.button_state('disabled')
-        root.update()
+        self.root.update()
 
         try:
             autotyper = AutoTyper(self.x_value.get(), self.y_value.get(),
                                   self.width_value.get(), self.height_value.get())
             autotyper.getImage()
         except:
-            self.error_message = Message(root, text= "INVALID BOX DIMENSIONS. TRY AGAIN", font="Verdana", width=600, foreground='red',)
+            self.error_message = Message(self.root, text= "INVALID BOX DIMENSIONS. TRY AGAIN", font="Verdana", width=600, foreground='red',)
             self.error_message.place(x=450, y=500)
-            root.update()
+            self.root.update()
             self.button_state('active')
             return -1
 
         self.load_preview()
-        self.check_error_message()
         self.run_button.destroy()
-        self.keybind_label = Message(root, text= f"The Program is Running! Press \"{self.keybind}\" to AutoType! \n           Press \"Escape\" to stop Running.", font="Verdana", width=500)
+        self.keybind_label = Message(self.root, text= f"The Program is Running! Press \"{self.keybind}\" to AutoType! \n           Press \"Escape\" to stop Running.", font="Verdana", width=500)
         self.keybind_label.place(x=410, y=450)
-        key = self.keybind.replace('_', '')
-        root.update()
+        self.root.update()
+
+        key = self.keybind
+        if key in key_dict:
+            key = key_dict[key]
+
 
         while True:
-            if self.ahk.key_state(key):
+            self.root.update()
+            if keyboard.is_pressed(key):
                 self.type_text()
-            if self.ahk.key_state('escape'):
+            if keyboard.is_pressed('esc'):
                 self.keybind_label.destroy()
-                self.run_button = Button(root, text='Run Program', font="Verdana", border=5, command=self.run)
+                self.run_button = Button(self.root, text='Run Program', font="Verdana", border=5, command=self.run)
                 self.run_button.place(x=550, y=450)
-                root.update()
                 break
 
-        root.update()
+        self.root.update()
         self.button_state('active')
 
     def type_text(self) -> None:
@@ -200,24 +217,24 @@ class UserInterface:
         """Updates the Keybind"""
         self.check_error_message()
         self.button_state('disabled')
-        root.update()
-        self.temp_label = Message(root, text= "Listening... Press The Desired Button", font="Verdana", width=500, fg='red')
+        self.root.update()
+        self.temp_label = Message(self.root, text= "Listening... Press The Desired Button", font="Verdana", width=500, fg='red')
         self.temp_label.place(x=465, y=500)
-        root.bind("<Key>", self._update)
+        self.root.bind("<Key>", self._update)
 
     def _update(self, event):
         """ Secondary function that does all the work"""
-        root.unbind("<Key>")
+        self.root.unbind("<Key>")
         self.temp_label.destroy()
         if event.keysym == 'Escape':
-            self.error_message = Message(root, text= "Escape isn't a valid input (You need it to quit the program). \n \t  Press the button to try again", font="Verdana", width=600, foreground='red',)
+            self.error_message = Message(self.root, text= "Escape isn't a valid input (You need it to quit the program). \n \t  Press the button to try again", font="Verdana", width=600, foreground='red',)
             self.error_message.place(x=380, y=500)
         else:
-            self.error_message = Message(root, text= "Success!", font="Verdana", width=600, foreground='green',)
+            self.error_message = Message(self.root, text= "Success!", font="Verdana", width=600, foreground='green',)
             self.error_message.place(x=570, y=500)
             self.keybind = event.keysym
 
-        root.update()
+        self.root.update()
         self.button_state('active')
 
     def check_error_message(self):
@@ -241,5 +258,5 @@ if __name__ == '__main__':
     SCREEN_WIDTH = root.winfo_screenwidth()
     SCREEN_HEIGHT = root.winfo_screenheight()
 
-    UserInterface(root)
+    UserInterface(root, SCREEN_WIDTH, SCREEN_HEIGHT)
     root.mainloop()

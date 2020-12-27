@@ -8,8 +8,8 @@ Reading wise it's pretty good.
 """
 import pytesseract as pt
 from PIL import ImageGrab, Image
-import pyautogui
 from typing import Optional
+import keyboard
 
 
 class AutoTyper:
@@ -48,7 +48,6 @@ class AutoTyper:
         screen = ImageGrab.grab(bbox=(self.x, self.y, self.width + self.x, self.height +self.y))
         screen.save('image.png')
 
-
     def readText(self) -> None:
         """Reads the text on image.png to a string"""
         self._text = pt.image_to_string(Image.open('image.png'))
@@ -57,14 +56,11 @@ class AutoTyper:
         self._text = self._text.replace("|", "I")
         self._text = self._text.replace("\n", " ")
 
-    def printText(self):
-        print(self._text)
-
     def type(self, delay: float) -> None:
         """Types out the text from image.png with a delay of <delay> (in seconds)
         with a default delay of 0.01
         """
-        pyautogui.write(self._text, interval=delay)
+        keyboard.write(text=self._text, delay=delay)
 
 
 
