@@ -3,11 +3,8 @@ This module deals with all the UI features
 """
 from tkinter import *
 from tkinter import ttk
-from PIL import ImageTk, Image, ImageGrab
+from PIL import ImageTk, Image, ImageGrab, ImageOps
 from autotyper import AutoTyper
-
-
-
 
 class Slider:
     def __init__(self, max, variable) -> None:
@@ -22,13 +19,11 @@ class Field:
 class UserInterface:
     def __init__(self, root) -> None:
         root.title('Typeracer AutoTyper')
-        mainframe = ttk.Frame(root, padding=10)
-        mainframe.grid(column=10, row=100, columnspan=1000, rowspan=1000, sticky=(N, W, E, S))
-
-        self.autotyper = AutoTyper()
+        previewframe = ttk.Frame(root, padding=10)
+        previewframe.place(x=500, y=75)
 
         # x label
-        X = ttk.Label(root, text='x value of box position:', font='Verdana', padding=5)
+        X = ttk.Label(root, text='x value of box position:', font='Verdana', padding=10)
         X.grid(column=0, row=0, sticky='nw')
 
         # x variable
@@ -80,7 +75,7 @@ class UserInterface:
         self.width_value = IntVar()
 
         # width slider
-        width_scale = Slider(SCREEN_HEIGHT, self.width_value)
+        width_scale = Slider(SCREEN_WITDTH, self.width_value)
         width_scale.scale.grid(column=0, row=9, sticky='nw', pady=10, padx=5)
 
         # width field
@@ -103,9 +98,8 @@ class UserInterface:
         delay_field.entry.grid(column=1, row=11, padx=5)
 
         #creates a canvas for preview
-        self.canvas = Canvas(mainframe, width = 500, height = 500)
-        self.canvas.grid(column = 10, row = 10, columnspan=100, rowspan=100)
-
+        self.canvas = Canvas(previewframe, width=500, height=300)
+        self.canvas.grid(sticky='E')
 
         preview_button = Button(root, text="See Preview", command=self.load_preview, height=1, width=15, font="Verdana", border=5 )
         preview_button.grid(column=0, row=16, sticky='nw', padx=10, pady=10)
@@ -116,9 +110,11 @@ class UserInterface:
 
     def type(self) -> None:
         """Type the text on typeracer out"""
-        self.autotyper.getImage()
-        self.autotyper.readText()
-        self.autotyper.type(delay = float(self.delay_value.get()))
+        autotyper = AutoTyper(self.x_value.get(), self.y_value.get(),
+                              self.width_value.get(), self.height_value.get())
+        autotyper.getImage()
+        autotyper.readText()
+        autotyper.type(delay = float(self.delay_value.get()))
 
     def load_preview(self):
         self.canvas.delete('all')
@@ -128,18 +124,20 @@ class UserInterface:
 
         image.save('image.png')
 
-        screen = ImageTk.PhotoImage(Image.open('image.png'))
-        self.canvas.create_image(100, 0, anchor='center', image=screen)
+        image = Image.open('image.png')
+        image = ImageOps.fit(image, (500, 300))
+        image.save('resized.png')
+        screen = ImageTk.PhotoImage(image)
+        self.canvas.create_image(0, 0, anchor='center', image=screen)
         self.canvas.image = screen
-        print('the function has been called')
+        print('showing preview now')
 
-# For Testing Purposes
+
 if __name__ == '__main__':
     root = Tk()
 
-
-    root.resizable(width=False, height=False)
-    root.geometry('{}x{}'.format(800, 550))
+    # root.resizable(width=False, height=False)
+    root.geometry('{}x{}'.format(900, 550))
     # constants
     SCREEN_WITDTH = root.winfo_screenwidth()
     SCREEN_HEIGHT = root.winfo_screenheight()
