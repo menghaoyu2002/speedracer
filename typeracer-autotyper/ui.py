@@ -3,6 +3,7 @@ This module deals with all the UI features
 """
 from tkinter import *
 from tkinter import ttk
+from PIL import ImageTk, Image, ImageGrab
 
 class Slider:
     def __init__(self, max, variable) -> None:
@@ -12,11 +13,6 @@ class Slider:
 class Field:
     def __init__(self, variable) -> None:
         self.entry = ttk.Entry(root, textvariable=variable, width=7, font="Verdana")
-
-
-class Preview:
-    def __init__(self) -> None:
-        pass
 
 
 class UserInterface:
@@ -31,7 +27,7 @@ class UserInterface:
 
 
         # x variable
-        x_value = StringVar()
+        x_value = IntVar()
 
         # x slider
         x_scale = Slider(SCREEN_WITDTH, x_value)
@@ -46,7 +42,7 @@ class UserInterface:
         Y.grid(column=0, row=4, sticky='nws')
 
         # y variable
-        y_value = StringVar()
+        y_value = IntVar()
 
         # y sliders
         y_scale = Slider(SCREEN_HEIGHT, y_value)
@@ -61,7 +57,7 @@ class UserInterface:
         height.grid(column=0, row=6, sticky='nws')
 
         #height variable
-        height_value = StringVar()
+        height_value = IntVar()
 
         # height slider
         height_scale = Slider(SCREEN_HEIGHT, height_value)
@@ -76,7 +72,7 @@ class UserInterface:
         width.grid(column=0, row=8, sticky='nws', pady=10)
 
         #width variable
-        width_value = StringVar()
+        width_value = IntVar()
 
         # width slider
         width_scale = Slider(SCREEN_HEIGHT, width_value)
@@ -91,7 +87,7 @@ class UserInterface:
         width.grid(column=0, row=10, sticky='nws', pady=10)
 
         #delay variable
-        delay_value = StringVar()
+        delay_value = IntVar()
 
         # delay slider
         delay_scale = Slider(1.0, delay_value)
@@ -100,6 +96,24 @@ class UserInterface:
         # delay field
         delay_field = Field(delay_value)
         delay_field.entry.grid(column=1, row=11, padx=10)
+
+        # Load Preview
+        def load_preview():
+            image = ImageGrab.grab(bbox=(x_value.get(), y_value.get(),
+                                   width_value.get() + x_value.get(), height_value.get() + y_value.get()))
+
+            image.save('image.png')
+
+            screen = ImageTk.PhotoImage(Image.open('image.png'))
+            preview_label = Label(root, image=screen)
+            preview_label.image = screen
+            # preview_label.grid(column=10, row=0)
+            preview_label.place(x=100, y=100)
+            print('the function has been called')
+
+
+        preview_button = ttk.Button(root, text="See Preview", command=load_preview)
+        preview_button.grid(column=0, row=13)
 
 
 # For Testing Purposes
