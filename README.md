@@ -1,4 +1,4 @@
-# Typeracer Autotyper
+# Speedracer
 Autotyper for typeracer. Works just as the name implies. 
 It reads text from an area of your screen and then types it out upon request.
 Can typeauto anything but specifically designed for typeracer. 
