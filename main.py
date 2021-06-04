@@ -14,5 +14,5 @@ class MainProgram:
         UserInterface(root, SCREEN_WITDTH, SCREEN_HEIGHT)
         root.mainloop()
 
-if __name__ == "__main"":
+if __name__ == "__main__":
     run = MainProgram()
